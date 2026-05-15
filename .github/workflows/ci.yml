@@ -33,3 +33,15 @@ jobs:
 
       - name: Run tests (pytest)
         run: pytest -q
+
+- name: Send Telegram message
+        if: always()
+        run: |
+          STATUS="SUCCESS"
+          if [ "${{ job.status }}" != "success" ]; then
+            STATUS="FAILED"
+          fi
+
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="CI finished: $STATUS in repo ${{ github.repository }}"
