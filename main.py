@@ -1,1 +1,3 @@
-print("Hello")
+def test():
+    x = 1 + 1
+    return x
